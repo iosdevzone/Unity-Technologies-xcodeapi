@@ -19,8 +19,8 @@ namespace UnityEditor.iOS.Xcode.Tests
 
         static void AssertFileExistsAndHasContents(string path, string contents)
         {
-            Assert.IsTrue(File.Exists(path));
-            Assert.AreEqual(contents, File.ReadAllText(path));
+            Assert.That(File.Exists(path), Is.True);
+            Assert.That(File.ReadAllText(path), Is.EqualTo(contents));
         }
 
         [Test]
@@ -44,8 +44,8 @@ namespace UnityEditor.iOS.Xcode.Tests
             catalog.Write();
 
             string datasetPath = Path.Combine(catalogPath, "data1.dataset");
-            Assert.IsTrue(Directory.Exists(catalogPath));
-            Assert.IsTrue(Directory.Exists(datasetPath));
+            Assert.That(Directory.Exists(catalogPath), Is.True);
+            Assert.That(Directory.Exists(datasetPath), Is.True);
             AssertFileExistsAndHasContents(Path.Combine(datasetPath, "Contents.json"),
                                            File.ReadAllText(Path.Combine(GetTestSourcePath(), "Dataset1.Contents.json")));
             AssertFileExistsAndHasContents(Path.Combine(datasetPath, "data1.dat"), "data1");
@@ -98,8 +98,8 @@ namespace UnityEditor.iOS.Xcode.Tests
             catalog.Write();
 
             string imagesetPath = Path.Combine(catalogPath, "img1.imageset");
-            Assert.IsTrue(Directory.Exists(catalogPath));
-            Assert.IsTrue(Directory.Exists(imagesetPath));
+            Assert.That(Directory.Exists(catalogPath), Is.True);
+            Assert.That(Directory.Exists(imagesetPath), Is.True);
             AssertFileExistsAndHasContents(Path.Combine(imagesetPath, "Contents.json"),
                                            File.ReadAllText(Path.Combine(GetTestSourcePath(), "Imageset1.Contents.json")));
             AssertFileExistsAndHasContents(Path.Combine(imagesetPath, "data1.png"), "img1");
@@ -133,8 +133,8 @@ namespace UnityEditor.iOS.Xcode.Tests
             catalog.Write();
 
             string imagesetPath = Path.Combine(catalogPath, "img1.imageset");
-            Assert.IsTrue(Directory.Exists(catalogPath));
-            Assert.IsTrue(Directory.Exists(imagesetPath));
+            Assert.That(Directory.Exists(catalogPath), Is.True);
+            Assert.That(Directory.Exists(imagesetPath), Is.True);
             AssertFileExistsAndHasContents(Path.Combine(imagesetPath, "Contents.json"),
                                            File.ReadAllText(Path.Combine(GetTestSourcePath(), "Imageset-duplicate.Contents.json")));
             AssertFileExistsAndHasContents(Path.Combine(imagesetPath, "data1.png"), "img1");
@@ -167,19 +167,19 @@ namespace UnityEditor.iOS.Xcode.Tests
 
             catalog.Write();
 
-            Assert.IsTrue(Directory.Exists(catalogPath));
+            Assert.That(Directory.Exists(catalogPath), Is.True);
             Assert.IsFalse(File.Exists(Path.Combine(catalogPath, "Contents.json")));
-            Assert.IsTrue(Directory.Exists(Path.Combine(catalogPath, "test")));
+            Assert.That(Directory.Exists(Path.Combine(catalogPath, "test")), Is.True);
             Assert.IsFalse(File.Exists(Path.Combine(catalogPath, "test/Contents.json")));
-            Assert.IsTrue(Directory.Exists(Path.Combine(catalogPath, "test/test")));
+            Assert.That(Directory.Exists(Path.Combine(catalogPath, "test/test")), Is.True);
             Assert.IsFalse(File.Exists(Path.Combine(catalogPath, "test/test/Contents.json")));
-            Assert.IsTrue(Directory.Exists(Path.Combine(catalogPath, "test/test/test2")));
+            Assert.That(Directory.Exists(Path.Combine(catalogPath, "test/test/test2")), Is.True);
             Assert.IsFalse(File.Exists(Path.Combine(catalogPath, "test/test/test2/Contents.json")));
-            Assert.IsTrue(Directory.Exists(Path.Combine(catalogPath, "test/test/test2/data1.dataset")));
-            Assert.IsTrue(Directory.Exists(Path.Combine(catalogPath, "test/test2")));
+            Assert.That(Directory.Exists(Path.Combine(catalogPath, "test/test/test2/data1.dataset")), Is.True);
+            Assert.That(Directory.Exists(Path.Combine(catalogPath, "test/test2")), Is.True);
             AssertFileExistsAndHasContents(Path.Combine(catalogPath, "test/test2/Contents.json"),
                                            File.ReadAllText(Path.Combine(GetTestSourcePath(), "Folder1.test2.Contents.json")));
-            Assert.IsTrue(Directory.Exists(Path.Combine(catalogPath, "test/test2/data2.dataset")));
+            Assert.That(Directory.Exists(Path.Combine(catalogPath, "test/test2/data2.dataset")), Is.True);
             AssertFileExistsAndHasContents(Path.Combine(catalogPath, "test/test/test2/data1.dataset/Contents.json"),
                                            File.ReadAllText(Path.Combine(GetTestSourcePath(), "Folder1.data1.dataset.Contents.json")));
             AssertFileExistsAndHasContents(Path.Combine(catalogPath, "test/test2/data2.dataset/Contents.json"),
@@ -208,8 +208,8 @@ namespace UnityEditor.iOS.Xcode.Tests
             catalog.Write();
 
             string datasetPath = Path.Combine(catalogPath, "data1.dataset");
-            Assert.IsTrue(Directory.Exists(catalogPath));
-            Assert.IsTrue(Directory.Exists(datasetPath));
+            Assert.That(Directory.Exists(catalogPath), Is.True);
+            Assert.That(Directory.Exists(datasetPath), Is.True);
             AssertFileExistsAndHasContents(Path.Combine(datasetPath, "Contents.json"),
                                            File.ReadAllText(Path.Combine(GetTestSourcePath(), "ODRTags1.data1.dataset.Contents.json")));
             AssertFileExistsAndHasContents(Path.Combine(datasetPath, "data1.dat"), "data1");
@@ -246,11 +246,11 @@ namespace UnityEditor.iOS.Xcode.Tests
             string layer1Path = Path.Combine(imageStackPath, "layer1.imagestacklayer");
             string layer1ImageSetPath = Path.Combine(layer1Path, "Content.imageset");
             string layer2Path = Path.Combine(imageStackPath, "layer2.imagestacklayer");
-            Assert.IsTrue(Directory.Exists(catalogPath));
-            Assert.IsTrue(Directory.Exists(imageStackPath));
-            Assert.IsTrue(Directory.Exists(layer1Path));
-            Assert.IsTrue(Directory.Exists(layer1ImageSetPath));
-            Assert.IsTrue(Directory.Exists(layer2Path));
+            Assert.That(Directory.Exists(catalogPath), Is.True);
+            Assert.That(Directory.Exists(imageStackPath), Is.True);
+            Assert.That(Directory.Exists(layer1Path), Is.True);
+            Assert.That(Directory.Exists(layer1ImageSetPath), Is.True);
+            Assert.That(Directory.Exists(layer2Path), Is.True);
 
             AssertFileExistsAndHasContents(Path.Combine(imageStackPath, "Contents.json"),
                                            File.ReadAllText(Path.Combine(GetTestSourcePath(), "ImageStack1.Contents.json")));
@@ -285,9 +285,9 @@ namespace UnityEditor.iOS.Xcode.Tests
             
             string brandAssetsPath = Path.Combine(catalogPath, "brand1.brandassets");
             string icon1Path = Path.Combine(brandAssetsPath, "icon1.imageset");
-            Assert.IsTrue(Directory.Exists(catalogPath));
-            Assert.IsTrue(Directory.Exists(brandAssetsPath));
-            Assert.IsTrue(Directory.Exists(icon1Path));
+            Assert.That(Directory.Exists(catalogPath), Is.True);
+            Assert.That(Directory.Exists(brandAssetsPath), Is.True);
+            Assert.That(Directory.Exists(icon1Path), Is.True);
             
             AssertFileExistsAndHasContents(Path.Combine(brandAssetsPath, "Contents.json"),
                                            File.ReadAllText(Path.Combine(GetTestSourcePath(), "BrandAssets1.Contents.json")));

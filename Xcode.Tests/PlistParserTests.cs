@@ -37,7 +37,7 @@ namespace UnityEditor.iOS.Xcode.Tests
 "));
             Assert.IsTrue(doc.root.values.ContainsKey("test"));
             var date = doc.root["test"].AsDate();
-            Assert.AreEqual(new System.DateTime(2009, 1, 2, 10, 11, 12, System.DateTimeKind.Utc), date);
+            Assert.That(date, Is.EqualTo(new System.DateTime(2009, 1, 2, 10, 11, 12, System.DateTimeKind.Utc)));
         }
 
         [Test]
@@ -51,7 +51,7 @@ namespace UnityEditor.iOS.Xcode.Tests
     <key>test</key>
     <date>2009-01-02T10:11:12Z</date>
   </dict>");
-            Assert.AreEqual(expected, doc.WriteToString());
+            Assert.That(doc.WriteToString(), Is.EqualTo(expected));
         }
 
         [Test]
@@ -66,7 +66,7 @@ namespace UnityEditor.iOS.Xcode.Tests
 "));
             Assert.IsTrue(doc.root.values.ContainsKey("test"));
             var date = doc.root["test"].AsReal();
-            Assert.AreEqual(12.1234f, date);
+            Assert.That(date, Is.EqualTo(12.1234f));
         }
 
         [Test]
@@ -80,7 +80,7 @@ namespace UnityEditor.iOS.Xcode.Tests
     <key>test</key>
     <real>12.1234</real>
   </dict>");
-            Assert.AreEqual(expected, doc.WriteToString());
+            Assert.That(doc.WriteToString(), Is.EqualTo(expected));
         }
     }
 }

@@ -216,7 +216,7 @@ namespace UnityEditor.iOS.Xcode.Tests
             Assert.IsTrue(proj.FindFileGuidByRealPath("relative/path1.cc") == "CCCCCCCC0000000000000001");
             Assert.IsTrue(proj.FindFileGuidByRealPath("/absolute/path/abs1.cc") == "CCCCCCCC0000000000000005");
             Assert.IsTrue(proj.FindFileGuidByProjectPath("Classes/some/path/abs1.cc") == "CCCCCCCC0000000000000005");
-            Assert.AreEqual(1, proj.GetGroupChildrenFiles("Classes/some").Count);
+            Assert.That(proj.GetGroupChildrenFiles("Classes/some").Count, Is.EqualTo(1));
             
             TestOutput(proj, "add_file2.pbxproj");
         }
@@ -228,8 +228,8 @@ namespace UnityEditor.iOS.Xcode.Tests
             PBXProject proj = ReadPBXProject();
 
             string fileGuid = proj.AddFile("relative/path1.cc", "Classes/path1.cc", PBXSourceTree.Source);
-            Assert.AreEqual(fileGuid, proj.AddFile("relative/path1.cc", "Classes/path1.cc", PBXSourceTree.Source));
-            Assert.AreEqual(fileGuid, proj.AddFile("relative/path2.cc", "Classes/path1.cc", PBXSourceTree.Source));
+            Assert.That(proj.AddFile("relative/path1.cc", "Classes/path1.cc", PBXSourceTree.Source), Is.EqualTo(fileGuid));
+            Assert.That(proj.AddFile("relative/path2.cc", "Classes/path1.cc", PBXSourceTree.Source), Is.EqualTo(fileGuid));
         }
 
         [Test]
@@ -243,7 +243,7 @@ namespace UnityEditor.iOS.Xcode.Tests
             proj.AddFileToBuildWithFlags(target, fileGuid, "-Wno-newline");
             proj.AddFileToBuildWithFlags(target, fileGuid, "-Wnewline"); // this call should be ignored
 
-            Assert.AreEqual(new List<string>{"-Wno-newline"}, proj.GetCompileFlagsForFile(target, fileGuid));
+            Assert.That(proj.GetCompileFlagsForFile(target, fileGuid), Is.EqualTo(new List<string>{"-Wno-newline"}));
         }
 
         [Test]
@@ -260,7 +260,7 @@ namespace UnityEditor.iOS.Xcode.Tests
             proj.SetCompileFlagsForFile(target, fileGuid, new List<string>{"-flag1", "flag2"});
             proj = Reserialize(proj);
 
-            Assert.AreEqual(new List<string>{"-flag1", "flag2"}, proj.GetCompileFlagsForFile(target, fileGuid));
+            Assert.That(proj.GetCompileFlagsForFile(target, fileGuid), Is.EqualTo(new List<string>{"-flag1", "flag2"}));
         }
 
         [Test]
@@ -276,7 +276,7 @@ namespace UnityEditor.iOS.Xcode.Tests
             proj.SetCompileFlagsForFile(target, fileGuid, new List<string>{"  -flag1   ", " flag2  "});
             proj = Reserialize(proj);
 
-            Assert.AreEqual(new List<string>{"-flag1", "flag2"}, proj.GetCompileFlagsForFile(target, fileGuid));
+            Assert.That(proj.GetCompileFlagsForFile(target, fileGuid), Is.EqualTo(new List<string>{"-flag1", "flag2"}));
         }
 
         [Test]
@@ -290,7 +290,7 @@ namespace UnityEditor.iOS.Xcode.Tests
             proj.AddFileToBuildWithFlags(target, fileGuid, "-Wno-newline");
             proj.SetCompileFlagsForFile(target, fileGuid, null);
 
-            Assert.AreEqual(0, proj.GetCompileFlagsForFile(target, fileGuid).Count);
+            Assert.That(proj.GetCompileFlagsForFile(target, fileGuid).Count, Is.EqualTo(0));
         }
 
         [Test]
@@ -376,46 +376,46 @@ namespace UnityEditor.iOS.Xcode.Tests
             PBXProject proj = ReadPBXProject();
 
             string fileGuid = proj.AddFile("relative/path1.cc", "Classes/path1.cc", PBXSourceTree.Source);
-            Assert.AreEqual(fileGuid, proj.FindFileGuidByProjectPath("Classes/path1.cc"));
-            Assert.AreEqual(fileGuid, proj.FindFileGuidByRealPath("relative/path1.cc"));
-            Assert.AreEqual(fileGuid, proj.FindFileGuidByRealPath("relative/path1.cc", PBXSourceTree.Source));
-            Assert.AreEqual(null, proj.FindFileGuidByRealPath("relative/path1.cc", PBXSourceTree.Absolute));
-            Assert.AreEqual(null, proj.FindFileGuidByRealPath("/relative/path1.cc", PBXSourceTree.Source));
-            Assert.AreEqual(null, proj.FindFileGuidByRealPath("relative/path1.cc", PBXSourceTree.Sdk));
+            Assert.That(proj.FindFileGuidByProjectPath("Classes/path1.cc"), Is.EqualTo(fileGuid));
+            Assert.That(proj.FindFileGuidByRealPath("relative/path1.cc"), Is.EqualTo(fileGuid));
+            Assert.That(proj.FindFileGuidByRealPath("relative/path1.cc", PBXSourceTree.Source), Is.EqualTo(fileGuid));
+            Assert.That(proj.FindFileGuidByRealPath("relative/path1.cc", PBXSourceTree.Absolute), Is.EqualTo(null));
+            Assert.That(proj.FindFileGuidByRealPath("/relative/path1.cc", PBXSourceTree.Source), Is.EqualTo(null));
+            Assert.That(proj.FindFileGuidByRealPath("relative/path1.cc", PBXSourceTree.Sdk), Is.EqualTo(null));
 
             proj.AddFile("absolute/path1.cc", "Classes/path2.cc", PBXSourceTree.Absolute);
-            Assert.AreEqual(fileGuid, proj.FindFileGuidByProjectPath("Classes/path2.cc"));
-            Assert.AreEqual(fileGuid, proj.FindFileGuidByRealPath("absolute/path1.cc"));
-            Assert.AreEqual(fileGuid, proj.FindFileGuidByRealPath("absolute/path1.cc", PBXSourceTree.Absolute));
-            Assert.AreEqual(null, proj.FindFileGuidByRealPath("/absolute/path1.cc", PBXSourceTree.Absolute));
-            Assert.AreEqual(null, proj.FindFileGuidByRealPath("absolute/path1.cc", PBXSourceTree.Source));
-            Assert.AreEqual(null, proj.FindFileGuidByRealPath("absolute/path1.cc", PBXSourceTree.Sdk));
+            Assert.That(proj.FindFileGuidByProjectPath("Classes/path2.cc"), Is.EqualTo(fileGuid));
+            Assert.That(proj.FindFileGuidByRealPath("absolute/path1.cc"), Is.EqualTo(fileGuid));
+            Assert.That(proj.FindFileGuidByRealPath("absolute/path1.cc", PBXSourceTree.Absolute), Is.EqualTo(fileGuid));
+            Assert.That(proj.FindFileGuidByRealPath("/absolute/path1.cc", PBXSourceTree.Absolute), Is.EqualTo(null));
+            Assert.That(proj.FindFileGuidByRealPath("absolute/path1.cc", PBXSourceTree.Source), Is.EqualTo(null));
+            Assert.That(proj.FindFileGuidByRealPath("absolute/path1.cc", PBXSourceTree.Sdk), Is.EqualTo(null));
 
             proj.AddFile("/absolute2/path2.cc", "Classes/path3.cc", PBXSourceTree.Absolute);
-            Assert.AreEqual(fileGuid, proj.FindFileGuidByProjectPath("Classes/path3.cc"));
-            Assert.AreEqual(fileGuid, proj.FindFileGuidByRealPath("/absolute2/path2.cc"));
-            Assert.AreEqual(fileGuid, proj.FindFileGuidByRealPath("absolute2/path2.cc"));
+            Assert.That(proj.FindFileGuidByProjectPath("Classes/path3.cc"), Is.EqualTo(fileGuid));
+            Assert.That(proj.FindFileGuidByRealPath("/absolute2/path2.cc"), Is.EqualTo(fileGuid));
+            Assert.That(proj.FindFileGuidByRealPath("absolute2/path2.cc"), Is.EqualTo(fileGuid));
 
-            Assert.AreEqual(fileGuid, proj.FindFileGuidByRealPath("absolute/path1.cc", PBXSourceTree.Absolute));
-            Assert.AreEqual(null, proj.FindFileGuidByRealPath("/absolute/path1.cc", PBXSourceTree.Absolute));
-            Assert.AreEqual(null, proj.FindFileGuidByRealPath("absolute/path1.cc", PBXSourceTree.Source));
-            Assert.AreEqual(null, proj.FindFileGuidByRealPath("absolute/path1.cc", PBXSourceTree.Sdk));
+            Assert.That(proj.FindFileGuidByRealPath("absolute/path1.cc", PBXSourceTree.Absolute), Is.EqualTo(fileGuid));
+            Assert.That(proj.FindFileGuidByRealPath("/absolute/path1.cc", PBXSourceTree.Absolute), Is.EqualTo(null));
+            Assert.That(proj.FindFileGuidByRealPath("absolute/path1.cc", PBXSourceTree.Source), Is.EqualTo(null));
+            Assert.That(proj.FindFileGuidByRealPath("absolute/path1.cc", PBXSourceTree.Sdk), Is.EqualTo(null));
 
             fileGuid = proj.AddFile("sdk/path1.cc", "Classes/path4.cc", PBXSourceTree.Sdk);
-            Assert.AreEqual(fileGuid, proj.FindFileGuidByProjectPath("Classes/path4.cc"));
-            Assert.AreEqual(fileGuid, proj.FindFileGuidByRealPath("sdk/path1.cc"));
-            Assert.AreEqual(fileGuid, proj.FindFileGuidByRealPath("sdk/path1.cc", PBXSourceTree.Sdk));
-            Assert.AreEqual(null, proj.FindFileGuidByRealPath("sdk/path1.cc", PBXSourceTree.Absolute));
-            Assert.AreEqual(null, proj.FindFileGuidByRealPath("sdk/path1.cc", PBXSourceTree.Source));
-            Assert.AreEqual(null, proj.FindFileGuidByRealPath("/sdk/path1.cc", PBXSourceTree.Sdk));
+            Assert.That(proj.FindFileGuidByProjectPath("Classes/path4.cc"), Is.EqualTo(fileGuid));
+            Assert.That(proj.FindFileGuidByRealPath("sdk/path1.cc"), Is.EqualTo(fileGuid));
+            Assert.That(proj.FindFileGuidByRealPath("sdk/path1.cc", PBXSourceTree.Sdk), Is.EqualTo(fileGuid));
+            Assert.That(proj.FindFileGuidByRealPath("sdk/path1.cc", PBXSourceTree.Absolute), Is.EqualTo(null));
+            Assert.That(proj.FindFileGuidByRealPath("sdk/path1.cc", PBXSourceTree.Source), Is.EqualTo(null));
+            Assert.That(proj.FindFileGuidByRealPath("/sdk/path1.cc", PBXSourceTree.Sdk), Is.EqualTo(null));
 
             fileGuid = proj.AddFile("dev/path1.cc", "Classes/path5.cc", PBXSourceTree.Developer);
-            Assert.AreEqual(fileGuid, proj.FindFileGuidByProjectPath("Classes/path5.cc"));
-            Assert.AreEqual(fileGuid, proj.FindFileGuidByRealPath("dev/path1.cc"));
-            Assert.AreEqual(fileGuid, proj.FindFileGuidByRealPath("dev/path1.cc", PBXSourceTree.Developer));
-            Assert.AreEqual(null, proj.FindFileGuidByRealPath("dev/path1.cc", PBXSourceTree.Absolute));
-            Assert.AreEqual(null, proj.FindFileGuidByRealPath("dev/path1.cc", PBXSourceTree.Source));
-            Assert.AreEqual(null, proj.FindFileGuidByRealPath("/dev/path1.cc", PBXSourceTree.Developer));
+            Assert.That(proj.FindFileGuidByProjectPath("Classes/path5.cc"), Is.EqualTo(fileGuid));
+            Assert.That(proj.FindFileGuidByRealPath("dev/path1.cc"), Is.EqualTo(fileGuid));
+            Assert.That(proj.FindFileGuidByRealPath("dev/path1.cc", PBXSourceTree.Developer), Is.EqualTo(fileGuid));
+            Assert.That(proj.FindFileGuidByRealPath("dev/path1.cc", PBXSourceTree.Absolute), Is.EqualTo(null));
+            Assert.That(proj.FindFileGuidByRealPath("dev/path1.cc", PBXSourceTree.Source), Is.EqualTo(null));
+            Assert.That(proj.FindFileGuidByRealPath("/dev/path1.cc", PBXSourceTree.Developer), Is.EqualTo(null));
         }
 
         [Test]
@@ -511,7 +511,7 @@ namespace UnityEditor.iOS.Xcode.Tests
         {
             ResetGuidGenerator();
             PBXProject proj = ReadPBXProject();
-            Assert.AreEqual("29B97313FDCFA39411CA2CEA", proj.ProjectGuid());
+            Assert.That(proj.ProjectGuid(), Is.EqualTo("29B97313FDCFA39411CA2CEA"));
         }
 
         [Test]
@@ -519,7 +519,7 @@ namespace UnityEditor.iOS.Xcode.Tests
         {
             ResetGuidGenerator();
             PBXProject proj = ReadPBXProject();
-            Assert.AreEqual(new List<string>{"Release"}, proj.BuildConfigNames());
+            Assert.That(proj.BuildConfigNames(), Is.EqualTo(new List<string>{"Release"}));
         }
 
         [Test]
@@ -530,11 +530,11 @@ namespace UnityEditor.iOS.Xcode.Tests
             var targetGuid = proj.TargetGuidByName(PBXProject.GetUnityTargetName());
 
             proj.AddBuildConfig("Debug");
-            Assert.AreEqual(new List<string>{"Release", "Debug"}, proj.BuildConfigNames());
-            Assert.AreEqual("C01FCF5008A954540054247B", proj.BuildConfigByName(proj.ProjectGuid(), "Release"));
-            Assert.AreEqual("1D6058950D05DD3E006BFB54", proj.BuildConfigByName(targetGuid, "Release"));
-            Assert.AreEqual("CCCCCCCC0000000000000001", proj.BuildConfigByName(proj.ProjectGuid(), "Debug"));
-            Assert.AreEqual("CCCCCCCC0000000000000002", proj.BuildConfigByName(targetGuid, "Debug"));
+            Assert.That(proj.BuildConfigNames(), Is.EqualTo(new List<string>{"Release", "Debug"}));
+            Assert.That(proj.BuildConfigByName(proj.ProjectGuid(), "Release"), Is.EqualTo("C01FCF5008A954540054247B"));
+            Assert.That(proj.BuildConfigByName(targetGuid, "Release"), Is.EqualTo("1D6058950D05DD3E006BFB54"));
+            Assert.That(proj.BuildConfigByName(proj.ProjectGuid(), "Debug"), Is.EqualTo("CCCCCCCC0000000000000001"));
+            Assert.That(proj.BuildConfigByName(targetGuid, "Debug"), Is.EqualTo("CCCCCCCC0000000000000002"));
         }
 
         [Test]
@@ -560,11 +560,11 @@ namespace UnityEditor.iOS.Xcode.Tests
             proj.RemoveBuildConfig("Debug");
             proj.RemoveBuildConfig("NotExisting"); // should be ignored
 
-            Assert.AreEqual(new List<string>{"Release"}, proj.BuildConfigNames());
-            Assert.AreEqual("C01FCF5008A954540054247B", proj.BuildConfigByName(proj.ProjectGuid(), "Release"));
-            Assert.AreEqual("1D6058950D05DD3E006BFB54", proj.BuildConfigByName(targetGuid, "Release"));
-            Assert.AreEqual(null, proj.BuildConfigByName(proj.ProjectGuid(), "Debug"));
-            Assert.AreEqual(null, proj.BuildConfigByName(targetGuid, "Debug"));
+            Assert.That(proj.BuildConfigNames(), Is.EqualTo(new List<string>{"Release"}));
+            Assert.That(proj.BuildConfigByName(proj.ProjectGuid(), "Release"), Is.EqualTo("C01FCF5008A954540054247B"));
+            Assert.That(proj.BuildConfigByName(targetGuid, "Release"), Is.EqualTo("1D6058950D05DD3E006BFB54"));
+            Assert.That(proj.BuildConfigByName(proj.ProjectGuid(), "Debug"), Is.EqualTo(null));
+            Assert.That(proj.BuildConfigByName(targetGuid, "Debug"), Is.EqualTo(null));
         }
 
         [Test]
@@ -587,13 +587,13 @@ namespace UnityEditor.iOS.Xcode.Tests
             string targetGuid = proj.TargetGuidByName(PBXProject.GetUnityTargetName());
             string newTargetGuid = proj.AddTarget("TestTarget", ".dylib", "test.type");
 
-            Assert.AreEqual("C01FCF5008A954540054247B", proj.BuildConfigByName(proj.ProjectGuid(), "Release"));
-            Assert.AreEqual("1D6058950D05DD3E006BFB54", proj.BuildConfigByName(targetGuid, "Release"));
-            Assert.AreEqual("CCCCCCCC0000000000000006", proj.BuildConfigByName(newTargetGuid, "Release"));
+            Assert.That(proj.BuildConfigByName(proj.ProjectGuid(), "Release"), Is.EqualTo("C01FCF5008A954540054247B"));
+            Assert.That(proj.BuildConfigByName(targetGuid, "Release"), Is.EqualTo("1D6058950D05DD3E006BFB54"));
+            Assert.That(proj.BuildConfigByName(newTargetGuid, "Release"), Is.EqualTo("CCCCCCCC0000000000000006"));
 
-            Assert.AreEqual("CCCCCCCC0000000000000001", proj.BuildConfigByName(proj.ProjectGuid(), "Debug"));
-            Assert.AreEqual("CCCCCCCC0000000000000002", proj.BuildConfigByName(targetGuid, "Debug"));
-            Assert.AreEqual("CCCCCCCC0000000000000007", proj.BuildConfigByName(newTargetGuid, "Debug"));
+            Assert.That(proj.BuildConfigByName(proj.ProjectGuid(), "Debug"), Is.EqualTo("CCCCCCCC0000000000000001"));
+            Assert.That(proj.BuildConfigByName(targetGuid, "Debug"), Is.EqualTo("CCCCCCCC0000000000000002"));
+            Assert.That(proj.BuildConfigByName(newTargetGuid, "Debug"), Is.EqualTo("CCCCCCCC0000000000000007"));
         }
 
         [Test]
@@ -617,36 +617,36 @@ namespace UnityEditor.iOS.Xcode.Tests
             string target = proj.AddTarget("TestTarget", ".dylib", "test.type");
 
             Assert.IsNull(proj.GetSourcesBuildPhaseByTarget(target));
-            Assert.AreEqual("CCCCCCCC0000000000000005", proj.AddSourcesBuildPhase(target));
-            Assert.AreEqual("CCCCCCCC0000000000000005", proj.GetSourcesBuildPhaseByTarget(target));
-            Assert.AreEqual("CCCCCCCC0000000000000005", proj.AddSourcesBuildPhase(target));
+            Assert.That(proj.AddSourcesBuildPhase(target), Is.EqualTo("CCCCCCCC0000000000000005"));
+            Assert.That(proj.GetSourcesBuildPhaseByTarget(target), Is.EqualTo("CCCCCCCC0000000000000005"));
+            Assert.That(proj.AddSourcesBuildPhase(target), Is.EqualTo("CCCCCCCC0000000000000005"));
 
             Assert.IsNull(proj.GetResourcesBuildPhaseByTarget(target));
-            Assert.AreEqual("CCCCCCCC0000000000000006", proj.AddResourcesBuildPhase(target));
-            Assert.AreEqual("CCCCCCCC0000000000000006", proj.GetResourcesBuildPhaseByTarget(target));
-            Assert.AreEqual("CCCCCCCC0000000000000006", proj.AddResourcesBuildPhase(target));
+            Assert.That(proj.AddResourcesBuildPhase(target), Is.EqualTo("CCCCCCCC0000000000000006"));
+            Assert.That(proj.GetResourcesBuildPhaseByTarget(target), Is.EqualTo("CCCCCCCC0000000000000006"));
+            Assert.That(proj.AddResourcesBuildPhase(target), Is.EqualTo("CCCCCCCC0000000000000006"));
 
             Assert.IsNull(proj.GetFrameworksBuildPhaseByTarget(target));
-            Assert.AreEqual("CCCCCCCC0000000000000007", proj.AddFrameworksBuildPhase(target));
-            Assert.AreEqual("CCCCCCCC0000000000000007", proj.GetFrameworksBuildPhaseByTarget(target));
-            Assert.AreEqual("CCCCCCCC0000000000000007", proj.AddFrameworksBuildPhase(target));
+            Assert.That(proj.AddFrameworksBuildPhase(target), Is.EqualTo("CCCCCCCC0000000000000007"));
+            Assert.That(proj.GetFrameworksBuildPhaseByTarget(target), Is.EqualTo("CCCCCCCC0000000000000007"));
+            Assert.That(proj.AddFrameworksBuildPhase(target), Is.EqualTo("CCCCCCCC0000000000000007"));
 
             Assert.IsNull(proj.GetCopyFilesBuildPhaseByTarget(target, "Copy files", "", "13"));
-            Assert.AreEqual("CCCCCCCC0000000000000008", proj.AddCopyFilesBuildPhase(target, "Copy files", "", "13"));
-            Assert.AreEqual("CCCCCCCC0000000000000008", proj.GetCopyFilesBuildPhaseByTarget(target, "Copy files", "", "13"));
-            Assert.AreEqual("CCCCCCCC0000000000000008", proj.AddCopyFilesBuildPhase(target, "Copy files", "", "13"));
+            Assert.That(proj.AddCopyFilesBuildPhase(target, "Copy files", "", "13"), Is.EqualTo("CCCCCCCC0000000000000008"));
+            Assert.That(proj.GetCopyFilesBuildPhaseByTarget(target, "Copy files", "", "13"), Is.EqualTo("CCCCCCCC0000000000000008"));
+            Assert.That(proj.AddCopyFilesBuildPhase(target, "Copy files", "", "13"), Is.EqualTo("CCCCCCCC0000000000000008"));
 
             // check whether all parameters are actually matched against existing phases
             Assert.IsNull(proj.GetCopyFilesBuildPhaseByTarget(target, "Copy files2", "", "13"));
             Assert.IsNull(proj.GetCopyFilesBuildPhaseByTarget(target, "Copy files", "path", "13"));
             Assert.IsNull(proj.GetCopyFilesBuildPhaseByTarget(target, "Copy files", "", "14"));
 
-            Assert.AreEqual("CCCCCCCC0000000000000009", proj.AddCopyFilesBuildPhase(target, "Copy files2", "", "13"));
-            Assert.AreEqual("CCCCCCCC0000000000000009", proj.GetCopyFilesBuildPhaseByTarget(target, "Copy files2", "", "13"));
-            Assert.AreEqual("CCCCCCCC0000000000000010", proj.AddCopyFilesBuildPhase(target, "Copy files", "path", "13"));
-            Assert.AreEqual("CCCCCCCC0000000000000010", proj.GetCopyFilesBuildPhaseByTarget(target, "Copy files", "path", "13"));
-            Assert.AreEqual("CCCCCCCC0000000000000011", proj.AddCopyFilesBuildPhase(target, "Copy files", "", "14"));
-            Assert.AreEqual("CCCCCCCC0000000000000011", proj.GetCopyFilesBuildPhaseByTarget(target, "Copy files", "", "14"));
+            Assert.That(proj.AddCopyFilesBuildPhase(target, "Copy files2", "", "13"), Is.EqualTo("CCCCCCCC0000000000000009"));
+            Assert.That(proj.GetCopyFilesBuildPhaseByTarget(target, "Copy files2", "", "13"), Is.EqualTo("CCCCCCCC0000000000000009"));
+            Assert.That(proj.AddCopyFilesBuildPhase(target, "Copy files", "path", "13"), Is.EqualTo("CCCCCCCC0000000000000010"));
+            Assert.That(proj.GetCopyFilesBuildPhaseByTarget(target, "Copy files", "path", "13"), Is.EqualTo("CCCCCCCC0000000000000010"));
+            Assert.That(proj.AddCopyFilesBuildPhase(target, "Copy files", "", "14"), Is.EqualTo("CCCCCCCC0000000000000011"));
+            Assert.That(proj.GetCopyFilesBuildPhaseByTarget(target, "Copy files", "", "14"), Is.EqualTo("CCCCCCCC0000000000000011"));
         }
 
         [Test]
@@ -692,7 +692,7 @@ namespace UnityEditor.iOS.Xcode.Tests
 
             // first, include a framework as a regular file
             var fileGuid = proj.AddFile("path/test.framework", "Frameworks/test.framework");
-            Assert.AreEqual("CCCCCCCC0000000000000001", fileGuid);
+            Assert.That(fileGuid, Is.EqualTo("CCCCCCCC0000000000000001"));
 
             proj.AddFileToEmbedFrameworks(target, fileGuid);
             Assert.IsNotNull(proj.GetCopyFilesBuildPhaseByTarget(target, "Embed Frameworks", "", "10"));

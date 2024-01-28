@@ -22,9 +22,9 @@ namespace UnityEditor.iOS.Xcode.Tests
         {
             var xcscheme = new XcScheme();
             xcscheme.ReadFromString(ReadSourceFile("base1.xcscheme"));
-            Assert.AreEqual("Debug", xcscheme.GetBuildConfiguration());
+            Assert.That(xcscheme.GetBuildConfiguration(), Is.EqualTo("Debug"));
             xcscheme.SetBuildConfiguration("MyConfiguration");
-            Assert.AreEqual("MyConfiguration", xcscheme.GetBuildConfiguration());
+            Assert.That(xcscheme.GetBuildConfiguration(), Is.EqualTo("MyConfiguration"));
         }
 
         [Test]

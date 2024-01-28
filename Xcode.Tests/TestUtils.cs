@@ -82,7 +82,7 @@ namespace UnityEditor.iOS.Xcode.Tests
             text = contentsUpdater(text);
 
             WriteResultFile(expectedFile, text);
-            Assert.AreEqual(expectedText, text);
+            Assert.That(text, Is.EqualTo(expectedText));
         }
 
         protected void TestXmlUpdate(string inputFile, string expectedFile,
